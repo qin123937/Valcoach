@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阵容教练 · 无畏契约阵容分析与道具配合</title>
+<meta name="description" content="选完 5 个英雄，立刻知道这套阵容在亚海悬城该怎么打：覆盖度体检、结构性缺口、可用的组合拳、第 5 人推荐，以及 AI 解读。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<!-- 脚本出错时把错误显示出来，避免"白屏不知道为什么" -->
+<script>
+  window.addEventListener('error', function (e) {
+    var d = document.getElementById('boot-error');
+    if (!d) return;
+    d.style.display = 'block';
+    d.textContent = '页面脚本出错：' + (e.message || '未知错误') +
+      (e.filename ? '（' + e.filename.split('/').pop() + ':' + e.lineno + '）' : '');
+  });
+</script>
+<div id="boot-error" style="display:none;margin:12px 22px;padding:12px 16px;border-radius:8px;
+  background:#3a1620;border:1px solid #ff4655;color:#ffb3bc;font-size:13px;line-height:1.6"></div>
+
+<header class="topbar">
+  <div class="brand">阵容教练<span>COMP COACH</span></div>
+  <div class="mapchip">亚海悬城 <span>Ascent · 首期深做</span></div>
+  <div class="spacer"></div>
+  <div class="side-switch">
+    <button data-side="attack" class="on">进攻</button>
+    <button data-side="defend">防守</button>
+  </div>
+  <button id="btn-preset" class="ghost slim" title="载入一套常用标准阵容">参考阵容</button>
+  <button id="btn-tune" class="ghost slim" title="调整每个英雄的 8 维能力数值（不用改文件）">调参数</button>
+  <button id="btn-tactics" class="ghost slim" title="自己写战术组合拳，不用改文件">战术</button>
+  <button id="btn-clear" class="ghost slim">清空</button>
+  <button id="btn-settings" class="ghost slim">API 设置</button>
+  <button id="btn-ai" class="ghost">AI 解读</button>
+</header>
+
+<main>
+
+  <!-- 阵容 -->
+  <section class="comp">
+    <div class="map-banner" id="map-banner"></div>
+    <h2>你的阵容 <small id="side-label">进攻方</small></h2>
+    <div class="slots" id="slots"></div>
+    <div class="comp-meta" id="comp-meta"></div>
+  </section>
+
+  <!-- 体检 + 结论 -->
+  <section class="grid">
+    <div class="card">
+      <h2>阵容体检 <small>8 维覆盖度 vs 这张图的需求</small></h2>
+      <div id="radar"></div>
+      <ul id="dims"></ul>
+    </div>
+    <div class="card">
+      <h2>结论</h2>
+      <div id="verdict"></div>
+      <h3>缺口</h3>
+      <ul id="gaps"></ul>
+      <h3>结构</h3>
+      <ul id="roles"></ul>
+    </div>
+  </section>
+
+  <!-- 组合拳 -->
+  <section class="card">
+    <h2>这套阵容能打的组合拳 <small id="combo-count"></small></h2>
+    <div id="combos"></div>
+  </section>
+
+  <!-- 第 5 人 -->
+  <section class="card">
+    <h2>第 5 人推荐 <small id="pick-note">先补齐缺失的位置，再看数据</small></h2>
+    <div id="picks"></div>
+  </section>
+
+  <!-- AI -->
+  <section class="card">
+    <h2>AI 教练解读 <small>Key 填在右上角「API 设置」，只会带上下面这份事实</small></h2>
+    <div id="ai-out">
+      <p class="muted">还没生成。选好阵容后点右上角「AI 解读」。<br>
+      模型只会看到规则引擎算出的事实（维度覆盖、缺口、命中的组合拳、第 5 人候选），并被要求不要编造数值和技能。<br>
+      请求失败会自动给出<b>离线版结论</b>（规则引擎直接生成，不需要网络），所以这个区块不会空着。</p>
+    </div>
+  </section>
+
+  <!-- 英雄池 -->
+  <section class="card">
+    <h2>英雄池 <small>点一下加入 / 再点一下移除</small></h2>
+    <div id="pool"></div>
+  </section>
+
+</main>
+
+<footer>
+  <p>数据说明：30 位英雄（版本 v13.09，第 30 位是遐思 Hush）的能力向量、地图需求向量、组合拳均为人工整理的静态数据，英雄名与技能名对齐国服官网（val.qq.com）、无畏契约 BWIKI 与官方 VALORANT Wiki；不是从官方接口实时拉取的数值，不同段位的实际强度会有差异。</p>
+  <p>这是非官方粉丝作品，与 Riot Games 无关。VALORANT 及相关素材版权归 Riot Games 所有。API Key 只留在你自己的浏览器里（内存 + 本机 localStorage），请求直接发往你填的接口地址，不经过任何第三方服务器。</p>
+</footer>
+
+<!-- AI 设置抽屉 -->
+<aside id="ai-drawer" class="drawer" aria-label="API 设置">
+  <div class="drawer-head">
+    <b>API 设置</b>
+    <span class="muted">OpenAI 兼容接口</span>
+    <button id="ai-close" class="ghost slim">关闭</button>
+  </div>
+  <div class="drawer-body">
+    <div class="field">
+      <label for="ai-preset">快速填入（只是帮你填地址和模型名，不会上传任何东西）</label>
+      <select id="ai-preset">
+        <option value="">选一家…</option>
+        <option value="deepseek" data-url="https://api.deepseek.com/v1/chat/completions" data-model="deepseek-chat">DeepSeek</option>
+        <option value="gemini" data-url="https://generativelanguage.googleapis.com/v1beta/openai/chat/completions" data-model="gemini-2.0-flash">Google Gemini（OpenAI 兼容）</option>
+        <option value="openrouter" data-url="https://openrouter.ai/api/v1/chat/completions" data-model="deepseek/deepseek-chat">OpenRouter</option>
+        <option value="dashscope" data-url="https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" data-model="qwen-plus">通义千问（兼容模式）</option>
+        <option value="ollama" data-url="http://localhost:11434/v1/chat/completions" data-model="qwen2.5:7b">本地 Ollama</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="ai-url">接口地址（需支持 /chat/completions）</label>
+      <input id="ai-url" type="text" spellcheck="false" placeholder="https://api.deepseek.com/v1/chat/completions">
+    </div>
+    <div class="field">
+      <label for="ai-model">模型名</label>
+      <input id="ai-model" type="text" spellcheck="false" placeholder="deepseek-chat">
+    </div>
+    <div class="field">
+      <label for="ai-key">API Key（只存在你本机，不会上传）</label>
+      <input id="ai-key" type="password" spellcheck="false" placeholder="sk-...">
+    </div>
+    <p class="muted">DeepSeek / 通义 / Kimi / OpenRouter / 本地 Ollama（<code>http://localhost:11434/v1/chat/completions</code>）都能用。请求会直接从你的浏览器发出去，没有中间服务器。</p>
+    <p class="muted">如果点了保存还是不能用：先点下面的<b>测试连接</b>，它会显示真实错误（Key 错 / 地址错 / 被 CORS 拦）。用 <code>file://</code> 双击打开时，部分接口不接受浏览器直连，改用本地服务器打开（<code>npx serve</code> 或 VS Code Live Server）即可。</p>
+    <div class="field row">
+      <button id="ai-save" class="ghost">保存</button>
+      <button id="ai-test" class="ghost slim">测试连接</button>
+    </div>
+    <div id="ai-status" class="ai-status"></div>
+  </div>
+</aside>
+
+<!-- 英雄档案（点英雄池里名字右侧的 i 打开） -->
+<div id="sheet" class="sheet" aria-hidden="true">
+  <div class="sheet-card" role="dialog" aria-label="英雄档案">
+    <button id="sheet-close" class="ghost slim sheet-close">关闭</button>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<!-- 调参数：英雄 8 维向量 -->
+<div id="tune" class="sheet tune" aria-hidden="true">
+  <div class="sheet-card tune-card" role="dialog" aria-label="调整英雄向量">
+    <button id="tune-close" class="ghost slim sheet-close">关闭</button>
+    <h2>调英雄向量 <small>烟 0~10、其余 0~5 · 改完立刻生效 · 记在这台机器上</small></h2>
+    <p class="muted xs">这是给"人工校对"用的：觉得某个英雄某项太强或太弱，直接改数字。覆盖度、缺口、第 5 人推荐会立刻跟着变，不用碰任何文件。8 列依次是 烟 / 闪 / 信息 / 硬控 / 机动 / 续航 / 守包 / 经济；允许 0.5 档。其中<b>经济</b>这一列把"道具价格"和"可复用性"算在一起：免费签名、每回合自动恢复、击杀重置的道具都算便宜（强起/经济局也拿得出核心道具），要靠现买的一次性道具算贵。</p>
+    <div class="tune-actions">
+      <button id="tune-reset" class="ghost slim">全部恢复默认</button>
+      <button id="tune-export" class="ghost slim">导出 JSON</button>
+      <span id="tune-status" class="muted xs"></span>
+    </div>
+    <div id="tune-body"></div>
+    <pre id="tune-json" class="tune-json" hidden></pre>
+  </div>
+</div>
+
+<!-- 战术面板：自建组合拳 -->
+<div id="tactics" class="sheet tactics" aria-hidden="true">
+  <div class="sheet-card tactics-card" role="dialog" aria-label="战术面板">
+    <button id="tactics-close" class="ghost slim sheet-close">关闭</button>
+    <h2>战术面板 <small>自己写组合拳 · 存在这台机器上 · 不碰代码</small></h2>
+    <p class="muted xs">一条战术 = 一串按时间排的道具。步骤里选谁、放什么技能、打到哪，<b>必要条件会自动按用到的英雄生成</b>；技能只能从该英雄的技能里选，所以不会写岔。保存后它会出现在"可用组合拳"里，也会一起交给 AI 当依据。</p>
+    <div class="tactic-actions">
+      <button id="tactic-new" class="ghost slim">+ 新建战术</button>
+      <button id="tactics-export" class="ghost slim">导出 JSON</button>
+      <button id="tactics-import" class="ghost slim">导入下面这段</button>
+      <span id="tactics-status" class="muted xs"></span>
+    </div>
+    <div id="tactics-list"></div>
+    <div id="tactic-editor" hidden></div>
+    <textarea id="tactics-json" class="tactic-json" rows="6" spellcheck="false" hidden
+      placeholder="把导出的 JSON 贴在这里，再点「导入下面这段」；也可以手写。"></textarea>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="data/agents.js"></script>
+<script src="data/ascent.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/tactics.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

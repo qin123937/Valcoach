@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>无畏契约 组合拳模板 v0.1</title>
+<style>
+  body { font-family: "Microsoft YaHei", "微软雅黑", sans-serif; font-size: 11pt; color: #111; line-height: 1.6; }
+  h1 { font-size: 20pt; margin: 0 0 6pt; }
+  h2 { font-size: 14pt; margin: 22pt 0 8pt; border-left: 4pt solid #c00; padding-left: 8pt; }
+  h3 { font-size: 12pt; margin: 14pt 0 6pt; }
+  p { margin: 6pt 0; }
+  .note { background: #fff5f5; border: 1pt solid #e0b4b4; padding: 8pt 10pt; margin: 10pt 0; }
+  .tip { color: #555; font-size: 10pt; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0 4pt; }
+  td, th { border: 1pt solid #999; padding: 4pt 6pt; font-size: 10pt; vertical-align: top; }
+  th { background: #eee; font-weight: bold; }
+  td.k { background: #f7f7f7; width: 22%; font-weight: bold; }
+  .steps td { height: 20pt; }
+  .num { width: 5%; }
+  .t { width: 12%; }
+  .who { width: 13%; }
+  .ab { width: 17%; }
+  .from { width: 13%; }
+  .to { width: 13%; }
+  .why { width: 27%; }
+  code { font-family: Consolas, monospace; background: #f2f2f2; }
+</style>
+</head>
+<body>
+
+<h1>无畏契约 · 组合拳模板 v0.1</h1>
+<p class="tip">地图：亚海悬城（首版只做这张）｜一共两块表：上面写"这套拳是什么"，下面写"每一步怎么打"</p>
+
+<div class="note">
+<b>怎么用（三步）</b><br>
+1. 往下找到「空白模板」那一节，把整块（标题 + 两张表）复制一份，放到文档最后，然后填表；<br>
+2. 一个文档里可以放好几套组合拳，程序会逐块读，块与块之间留个空行就行；<br>
+3. 填完：<b>文件 → 另存为 → 网页 (*.htm, *.html)</b>，把这个 .htm 拿去导入。<br>
+<span class="tip">不要用 .docx 导入（Word 的 docx 是压缩包，浏览器拆不动）；存 .docx 自己留档没问题。</span>
+</div>
+
+<h3>填的时候只要记住四条</h3>
+<p>
+① 一行 = 一个动作，从上往下按时间排，2–8 步；<br>
+② 英雄名、技能名、点位名都有固定写法，写俗称会报错（会提示正确写法，不会猜）；<br>
+③ 「为什么」这一格必须写清"这一步改变了什么"，写不出来就说明这步其实没必要；<br>
+④ 需要改的不是模板结构，是格子里的字——表头、列顺序、字段名请别动，动了就解析不了。
+</p>
+
+<h2>示例 1 · 进攻（已填好，照这个写）</h2>
+
+<table>
+  <tr><td class="k">名称</td><td>A 点快打 · 双烟双闪</td></tr>
+  <tr><td class="k">版本</td><td>11.08</td></tr>
+  <tr><td class="k">地图</td><td>亚海悬城</td></tr>
+  <tr><td class="k">阵营</td><td>进攻</td></tr>
+  <tr><td class="k">目标区域</td><td>A 点</td></tr>
+  <tr><td class="k">难度</td><td>2</td></tr>
+  <tr><td class="k">必需英雄</td><td>炼狱、猎枭、捷风</td></tr>
+  <tr><td class="k">可选替代</td><td>炼狱→幽影；猎枭→黑梦</td></tr>
+  <tr><td class="k">赢法（一句话）</td><td>20 秒内三个人一起踩进 A 点，对面还没来得及回防</td></tr>
+  <tr><td class="k">被什么破</td><td>对面在 A 大有狙击；我方烟被提前打散</td></tr>
+  <tr><td class="k">作者 / 来源</td><td>自己</td></tr>
+</table>
+
+<table class="steps">
+  <tr>
+    <th class="num">序</th><th class="t">时间</th><th class="who">谁</th><th class="ab">技能</th>
+    <th class="from">从哪（站位）</th><th class="to">打到哪（落点）</th><th class="why">为什么（这一步改变了什么）</th>
+  </tr>
+  <tr><td>1</td><td>0 秒</td><td>炼狱</td><td>空投烟幕</td><td>A 大</td><td>A 点</td><td>先封死包点视线，对面看不到我们进点</td></tr>
+  <tr><td>2</td><td>1 秒</td><td>猎枭</td><td>寻敌箭</td><td>A 大</td><td>天堂</td><td>照出天堂有没有人，决定要不要先清</td></tr>
+  <tr><td>3</td><td>3 秒</td><td>炼狱</td><td>燃烧榴弹</td><td>A 大</td><td>天堂</td><td>把天堂的人逼下来，不然我们进点会被点名</td></tr>
+  <tr><td>4</td><td>5 秒</td><td>捷风</td><td>逐风</td><td>A 大</td><td>A 点</td><td>第一个进点拉枪线，把注意力吸到自己身上</td></tr>
+  <tr><td>5</td><td>8 秒</td><td>猎枭</td><td>雷击箭</td><td>A 大</td><td>A 点</td><td>震掉包点近点的守点人，给捷风创造对枪优势</td></tr>
+</table>
+
+<h2>示例 2 · 防守（两三个人的短拳也成立）</h2>
+
+<table>
+  <tr><td class="k">名称</td><td>B 点延迟守包 · 蜂群加毒幕</td></tr>
+  <tr><td class="k">版本</td><td>11.08</td></tr>
+  <tr><td class="k">地图</td><td>亚海悬城</td></tr>
+  <tr><td class="k">阵营</td><td>防守</td></tr>
+  <tr><td class="k">目标区域</td><td>B 点</td></tr>
+  <tr><td class="k">难度</td><td>1</td></tr>
+  <tr><td class="k">必需英雄</td><td>奇乐、蝰蛇</td></tr>
+  <tr><td class="k">可选替代</td><td>奇乐→零</td></tr>
+  <tr><td class="k">赢法（一句话）</td><td>对面拆包时已经被蜂群和毒幕逼出包区，拆不完就得死</td></tr>
+  <tr><td class="k">被什么破</td><td>对面先手清掉自动哨兵；对面从 B 后贴脸</td></tr>
+  <tr><td class="k">作者 / 来源</td><td>自己</td></tr>
+</table>
+
+<table class="steps">
+  <tr>
+    <th class="num">序</th><th class="t">时间</th><th class="who">谁</th><th class="ab">技能</th>
+    <th class="from">从哪（站位）</th><th class="to">打到哪（落点）</th><th class="why">为什么（这一步改变了什么）</th>
+  </tr>
+  <tr><td>1</td><td>开局</td><td>奇乐</td><td>自动哨兵</td><td>B 点</td><td>市场</td><td>市场有人贴过来会先触发，给我们反应时间</td></tr>
+  <tr><td>2</td><td>开局</td><td>蝰蛇</td><td>毒幕</td><td>B 后</td><td>B 大</td><td>封掉 B 大长枪线，对面只能贴身进</td></tr>
+  <tr><td>3</td><td>对面进点</td><td>奇乐</td><td>纳米蜂群</td><td>B 点</td><td>B 点</td><td>对面踩进包区就被逼退，拆包时间被拖掉 5 秒</td></tr>
+  <tr><td>4</td><td>拆包</td><td>蝰蛇</td><td>蛇吻</td><td>B 点</td><td>B 点</td><td>易伤 + 持续伤害，逼对面放弃拆包</td></tr>
+</table>
+
+<h2>空白模板（复制这一整块）</h2>
+
+<h3>组合拳 · （这里写名称）</h3>
+
+<table>
+  <tr><td class="k">名称</td><td></td></tr>
+  <tr><td class="k">版本</td><td></td></tr>
+  <tr><td class="k">地图</td><td>亚海悬城</td></tr>
+  <tr><td class="k">阵营</td><td></td></tr>
+  <tr><td class="k">目标区域</td><td></td></tr>
+  <tr><td class="k">难度</td><td></td></tr>
+  <tr><td class="k">必需英雄</td><td></td></tr>
+  <tr><td class="k">可选替代</td><td></td></tr>
+  <tr><td class="k">赢法（一句话）</td><td></td></tr>
+  <tr><td class="k">被什么破</td><td></td></tr>
+  <tr><td class="k">作者 / 来源</td><td></td></tr>
+</table>
+
+<table class="steps">
+  <tr>
+    <th class="num">序</th><th class="t">时间</th><th class="who">谁</th><th class="ab">技能</th>
+    <th class="from">从哪（站位）</th><th class="to">打到哪（落点）</th><th class="why">为什么（这一步改变了什么）</th>
+  </tr>
+  <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<h2>填写规则速查</h2>
+
+<h3>能写的点位名（亚海悬城）</h3>
+<p><b>进攻方常用：</b>A 大、A 大厅、A 点、天堂、发电机、酒窖、树屋、中路、中庭、中连、B 大、B 点、市场<br>
+<b>防守方常用：</b>A 点、天堂、A 小、发电机、中路、中连、CT 出生点、B 点、市场、B 大、B 后</p>
+
+<h3>英雄技能的正确写法（30 位，按国服名）</h3>
+<table>
+  <tr><th>英雄</th><th>技能写法（四个技能名，顺序不限）</th></tr>
+  <tr><td>不死鸟</td><td>火冒三丈、火热手感、闪光曲球、再火一回</td></tr>
+  <tr><td>捷风</td><td>瞬云、凌空、逐风、飓刃</td></tr>
+  <tr><td>雷兹</td><td>花车巡游、惊喜翻腾、彩雷飞溅、晚安焰火</td></tr>
+  <tr><td>芮娜</td><td>睥睨、噬尽、逐散、女皇旨令</td></tr>
+  <tr><td>夜露</td><td>出其不意、攻其不备、不请自来、神鬼不觉</td></tr>
+  <tr><td>霓虹</td><td>充能疾驰、闪电弹球、高速通道、超限暴走</td></tr>
+  <tr><td>壹决</td><td>绝对屏障、稳态剥离、战斗心流、决斗通牒</td></tr>
+  <tr><td>幻棱</td><td>光棱闪爆、光速飞跃、溯流回光、时光修罗场</td></tr>
+  <tr><td>遐思</td><td>身随念动、灵光一念、念落星移、万念皆空</td></tr>
+  <tr><td>猎枭</td><td>枭型无人机、雷击箭、寻敌箭、狂猎之怒</td></tr>
+  <tr><td>铁臂</td><td>剧震余波、闪点爆破、山崩地陷、惊雷卷地</td></tr>
+  <tr><td>K/O</td><td>碎片溢出、闪存过载、零点嗅探、无效命令</td></tr>
+  <tr><td>黑梦</td><td>黯兽、幽爪、诡眼、夜临</td></tr>
+  <tr><td>斯凯</td><td>愈生之息、辟林之虎、引路之隼、追猎之灵</td></tr>
+  <tr><td>盖可</td><td>嗨爆全场、顽皮搭档、炫晕光波、无敌超鲨</td></tr>
+  <tr><td>钛狐</td><td>潜袭爬虫、特快专递、精准投放、末日审判</td></tr>
+  <tr><td>炼狱</td><td>振奋信标、燃烧榴弹、空投烟幕、天基光束</td></tr>
+  <tr><td>幽影</td><td>践影、暗魇、黑瘴、离魂</td></tr>
+  <tr><td>蝰蛇</td><td>蛇吻、瘴云、毒幕、蝰腹</td></tr>
+  <tr><td>星礈</td><td>重力之阱、新星脉冲、星云、宇宙分裂</td></tr>
+  <tr><td>海神</td><td>乱涌、狂潮、海盾、怒涛</td></tr>
+  <tr><td>暮蝶</td><td>虹吸、整蛊、霞染、化蝶</td></tr>
+  <tr><td>迷核</td><td>电音脉冲、共振谐律、声波帷幕、音脉强袭</td></tr>
+  <tr><td>零</td><td>震慑绊线、赛博囚笼、战术监控、神经取析</td></tr>
+  <tr><td>奇乐</td><td>纳米蜂群、自动哨兵、哨戒炮台、全面封锁</td></tr>
+  <tr><td>贤者</td><td>玉城、薄冰、逢春、再起</td></tr>
+  <tr><td>尚勃勒</td><td>贵宾限行、金牌猎头、闪转自如、孤高火力</td></tr>
+  <tr><td>钢锁</td><td>阻域屏障、声感陷阱、重力捕网、断魂索道</td></tr>
+  <tr><td>维斯</td><td>剃刀藤蔓、裁断、弧光玫瑰、铁棘禁园</td></tr>
+  <tr><td>禁灭</td><td>涡流折跃、裂变残片、噬源体、完全进化</td></tr>
+</table>
+<p class="tip">不确定某个技能叫什么？在页面里点英雄卡片上的「i」看档案，或者直接把表里的名字抄过去——导入时会按这张表校验。</p>
+
+<h3>难度怎么填</h3>
+<p>
+<b>1</b> = 两个人说一声就能打（守包、封烟拖时间）<br>
+<b>2</b> = 需要三个人卡时间（快打、假打转点）<br>
+<b>3</b> = 需要提前练落地位置（半墙、跳投、反弹）
+</p>
+
+</body>
+</html>
