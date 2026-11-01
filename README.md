@@ -240,3 +240,7 @@ const structBonus = primaryFill ? 8 : (roleFills.length ? 3 : 0);
 ---
 
 非官方粉丝作品，与 Riot Games 无关。VALORANT 及相关素材版权归 Riot Games 所有。
+## License
+
+代码与数据整理采用 [MIT](LICENSE)。英雄向量与组合拳是社区整理的可调估值，不代表官方数值。
+VALORANT 及其素材版权归 Riot Games 所有，本项目为非官方粉丝作品，与 Riot Games 无关。
